@@ -5,9 +5,6 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-alias ls='ls -F --color=auto'
-alias ll='ls -alF --color=auto'
-
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
@@ -26,4 +23,27 @@ if [ -d ~/.bashrc.d ]; then
     done
 fi
 unset rc
+
+# USER #########################################################################
+alias ls='ls -F --color=auto'
+alias ll='ls -alF --color=auto'
+alias la='ls -A --color=auto'
+alias l='ls -CF --color=auto'
+
+# rx for groups/others
+umask 022
+
+# History
+shopt -s histappend
+
+# Editor
+export EDITOR='vim'
+export VISUAL='vim'
+
+# vim behavior in terminal
 set -o vi
+
+# Expand env vars when autocompleting
+shopt -s direxpand
+
+export PRJ="/home/${USER}/workspace/projects"
