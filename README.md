@@ -1,0 +1,2 @@
+- Use the provided link_dotfiles.sh script to create symlinks in ~/ to the dotfiles in this repo.
+- This repo contains the dotfiles that I use.
