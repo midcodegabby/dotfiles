@@ -46,17 +46,29 @@ set -o vi
 # Expand env vars when autocompleting
 shopt -s direxpand
 
+# Allow Ctrl+s to do forward search rather than freezing the terminal
+stty -ixon
+
+# General workspace
 export PRJ="${HOME}/workspace/projects"
 
 # Toolchains
 ARCH=$(uname -m)
+ARM_NONE_EABI=true
+OPENOCD=true
+
+# Toolchain versions
+[[ -n "${ARM_NONE_EABI}" ]] && ARM_NONE_EABI_VER="15.2"
+[[ -n "${OPENOCD}" ]] && OPENOCD_VER="0.12.0-7"
 
 case "$ARCH" in
     aarch64)
-        export PATH="${HOME}/.local/opt/arm-gnu-toolchain-15.2.rel1-aarch64-arm-none-eabi/bin:${HOME}/.local/opt/xpack-openocd-0.12.0-7/bin:${PATH}"
+        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-aarch64-arm-none-eabi/bin:${PATH}"
+        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPNEOCD_VER}/bin:${PATH}"
         ;;
     x86_64)
-        export PATH="${HOME}/.local/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin:${HOME}/.local/opt/xpack-openocd-0.12.0-7/bin:${PATH}"
+        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-x86_64-arm-none-eabi/bin:${PATH}"
+        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPENOCD_VER}/bin:${PATH}"
         ;;
 esac
 
@@ -70,8 +82,8 @@ if [[ -d "${HOME}/.pyenv" ]]; then
     eval "$(pyenv init -)"
 fi
 
-# DO LAST #########################################################################
-# Source local machine .bashrc if present ##########################################
+# DO LAST ######################################################################
+# Source local machine .bashrc if present ######################################
 if [[ -f "${HOME}/.bashrc.local" ]]; then
     . "${HOME}/.bashrc.local"
 fi
