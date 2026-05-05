@@ -46,7 +46,7 @@ set -o vi
 # Expand env vars when autocompleting
 shopt -s direxpand
 
-export PRJ="/home/${USER}/workspace/projects"
+export PRJ="${HOME}/workspace/projects"
 
 # Toolchains
 ARCH=$(uname -m)

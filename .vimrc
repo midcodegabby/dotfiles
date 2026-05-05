@@ -2,9 +2,16 @@ runtime! defaults.vim
 
 syntax on
 
-" Richer colors
+" Richer colors (24-bit)
 if (has("termguicolors"))
     set termguicolors
+endif
+
+" Only do these changes if 256color is supported and tmux is being used
+if &term =~# '256color' && !empty($TMUX)
+    " Get colors working in tmux
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
 " Colors/bkgnd
