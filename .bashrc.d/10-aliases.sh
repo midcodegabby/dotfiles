@@ -27,7 +27,7 @@ alias gcm='git commit -m'
 alias gca='git commit -v -a'
 alias gp='git push'
 alias gl='git pull'
-alias gcsm='git commit -v -s -m'
+alias gcsm='git commit -s -m'
 
 # Navigation & History
 alias gco='git checkout'
