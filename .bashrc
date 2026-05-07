@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # .bashrc
 
 # Source global definitions
@@ -24,21 +26,11 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
-# USER #########################################################################
-alias ls='ls -F --color=auto'
-alias ll='ls -alF --color=auto'
-alias la='ls -A --color=auto'
-alias l='ls -CF --color=auto'
-
 # rx for groups/others
 umask 022
 
 # History
 shopt -s histappend
-
-# Editor
-export EDITOR='vim'
-export VISUAL='vim'
 
 # vim behavior in terminal
 set -o vi
@@ -48,39 +40,6 @@ shopt -s direxpand
 
 # Allow Ctrl+s to do forward search rather than freezing the terminal
 stty -ixon
-
-# General workspace
-export PRJ="${HOME}/workspace/projects"
-
-# Toolchains
-ARCH=$(uname -m)
-ARM_NONE_EABI=true
-OPENOCD=true
-
-# Toolchain versions
-[[ -n "${ARM_NONE_EABI}" ]] && ARM_NONE_EABI_VER="15.2"
-[[ -n "${OPENOCD}" ]] && OPENOCD_VER="0.12.0-7"
-
-case "$ARCH" in
-    aarch64)
-        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-aarch64-arm-none-eabi/bin:${PATH}"
-        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPNEOCD_VER}/bin:${PATH}"
-        ;;
-    x86_64)
-        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-x86_64-arm-none-eabi/bin:${PATH}"
-        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPENOCD_VER}/bin:${PATH}"
-        ;;
-esac
-
-# XDG directory variable - typically ~/.config
-[[ ! -z XDG_CONFIG_HOME ]] && export XDG_CONFIG_HOME="${HOME}/.config"
-
-# Load pyenv if present
-if [[ -d "${HOME}/.pyenv" ]]; then
-    export PYENV_ROOT="${HOME}/.pyenv"
-    [[ -d "${PYENV_ROOT}/bin" ]] && export PATH="${PYENV_ROOT}/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
 
 # DO LAST ######################################################################
 # Source local machine .bashrc if present ######################################

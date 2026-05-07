@@ -58,6 +58,15 @@ set ruler
 hi Search ctermbg=black ctermfg=white guibg=#000000 guifg=#FFFFFF
 hi CurSearch ctermbg=red ctermfg=black guibg=#FF0000 guifg=#000000
 
+" Vimdiff coloring
+if &diff
+    highlight DiffAdd guibg=#31C110 guifg=#000000
+    highlight DiffDelete guibg=#FF0000 guifg=#000000
+    highlight DiffChange guibg=#20FFFF guifg=#000000
+    highlight DiffText guibg=#FFFF00 guifg=#000000
+    highlight VertSplit guifg=#2a2a2a guibg=#2a2a2a
+endif
+
 " Source local vim rules
 if filereadable(expand("$HOME/.vimrc.local"))
   source "$HOME/.vimrc.local"

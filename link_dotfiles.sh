@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Create symlinks between $HOME/.* and the versions in this repo
 
