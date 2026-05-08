@@ -1,28 +1,39 @@
 #!/usr/bin/env bash
 
-# Toolchains
-ARCH=$(uname -m)
-ARM_NONE_EABI=true
-OPENOCD=true
+# Current machine architecture
+HOST_ARCH=$(uname -m)
 
-# Toolchain versions
-[[ -n "${ARM_NONE_EABI}" ]] && ARM_NONE_EABI_VER="15.2"
-[[ -n "${OPENOCD}" ]] && OPENOCD_VER="0.12.0-7"
+# Defaults
+TOOLCHAIN_DIR=${TOOLCHAIN_DIR:-"${HOME}/.local/opt"}
+ARM_NONE_EABI=${ARM_NONE_EABI:-true}
+OPENOCD=${OPENOCD:-true}
 
-case "$ARCH" in
-    aarch64)
-        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-aarch64-arm-none-eabi/bin:${PATH}"
-        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPNEOCD_VER}/bin:${PATH}"
-        ;;
-    x86_64)
-        [[ "${ARM_NONE_EABI}" == true ]] && export PATH="${HOME}/.local/opt/arm-gnu-toolchain-${ARM_NONE_EABI_VER}.rel1-x86_64-arm-none-eabi/bin:${PATH}"
-        [[ "${OPENOCD}" == true ]] && export PATH="${HOME}/.local/opt/xpack-openocd-${OPENOCD_VER}/bin:${PATH}"
-        ;;
-esac
+function load_toolchains() {
+    # 32-bit ARM target cross compiler
+    if [[ "${ARM_NONE_EABI}" == true ]]; then
+        local ARM_NONE_EABI_BIN="${TOOLCHAIN_DIR}/arm-gnu-toolchain-15.2.rel1-${HOST_ARCH}-arm-none-eabi/bin"
 
-# Load pyenv if present
-if [[ -d "${HOME}/.pyenv" ]]; then
-    export PYENV_ROOT="${HOME}/.pyenv"
-    [[ -d "${PYENV_ROOT}/bin" ]] && export PATH="${PYENV_ROOT}/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
+        # Check if arm-none-eabi bin directory exists, and if it has already been added to the PATH
+        if [[ -d "${ARM_NONE_EABI_BIN}" ]] && [[ ":${PATH}:" != *":${ARM_NONE_EABI_BIN}:"* ]]; then
+            export PATH="${ARM_NONE_EABI_BIN}:${PATH}"
+        fi
+    fi
+
+    # OpenOCD
+    if [[ "${OPENOCD}" == true ]]; then
+        local OPENOCD_BIN="${TOOLCHAIN_DIR}/xpack-openocd-0.12.0-7/bin"
+
+        if [[ -d "${OPENOCD_BIN}" ]] && [[ ":${PATH}:" != *":${OPENOCD_BIN}:"* ]]; then
+            export PATH="${OPENOCD_BIN}:${PATH}"
+        fi
+    fi
+
+    # Load pyenv if present
+    if [[ -d "${HOME}/.pyenv" ]]; then
+        export PYENV_ROOT="${HOME}/.pyenv"
+        if [[ -d "${PYENV_ROOT}/bin" ]] && [[ ":${PATH}:" != *":${PYENV_ROOT}/bin:"* ]]; then
+            export PATH="${PYENV_ROOT}/bin:$PATH"
+        fi
+        eval "$(pyenv init -)"
+    fi
+}
